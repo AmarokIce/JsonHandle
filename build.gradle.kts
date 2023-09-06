@@ -11,6 +11,7 @@ repositories {
     mavenCentral()
     maven { url = uri("https://jitpack.io") }
 
+    /* Use jitpack.
     maven {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/AmarokIce/amarokjsonforjava")
@@ -19,6 +20,7 @@ repositories {
             password = System.getenv("GITHUB_TOKEN")
         }
     }
+    */
 }
 
 dependencies {

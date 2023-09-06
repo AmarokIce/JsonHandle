@@ -8,6 +8,12 @@ import java.io.File
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
+        val file: File = File("json/src/", "Main.json5")
+        ProcessorEntry(file, file.parentFile).get().runMain()
+    }
+
+    fun testRun() {
+        /*
         val file = File("./JsonTest.json5")
 
         println("Simple Processor Start")
@@ -32,5 +38,6 @@ object Main {
         println(watch)
         watch.stop()
         println("Part End")
+        */
     }
 }

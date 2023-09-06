@@ -5,7 +5,7 @@ open class JsonProcessorException(protected val fileName: String, protected val 
         printStackTrace()
     }
 
-    override fun printStackTrace() {
+    final override fun printStackTrace() {
         println("${this.javaClass.name}: $msg")
         println("From: $fileName")
     }
