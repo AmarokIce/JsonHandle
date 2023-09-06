@@ -7,14 +7,16 @@ import com.google.common.collect.Lists
 import java.io.File
 
 @Suppress("unused")
-class ProcessorEntry(mainFile: File, dir: File = File(mainFile.path.replaceAfter(mainFile.name, ""))) {
+class ProcessorEntry(mainFile: File, dir: File? = null) {
     private val jsonCore: JsonProcessorCore by lazy {
         val pairMain: Pair<String, MapNode> = Pair(mainFile.nameWithoutExtension, json.tryPullObjectOrEmpty(json.parse(mainFile)))
         val fileManager = FileManager(pairMain)
 
-        if (dir.isDirectory) {
-            getFiles(dir).forEach {
-                fileManager.addFile(it)
+        dir?.let {dir ->
+            if (dir.isDirectory) {
+                getFiles(dir).forEach {
+                    fileManager.addFile(it)
+                }
             }
         }
 

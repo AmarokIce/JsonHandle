@@ -5,7 +5,7 @@ import club.someoneice.jsonprocessor.json
 import com.google.common.collect.Maps
 
 class JsonProcessorUtil internal constructor(private val core: JsonProcessorCore) {
-    internal fun stringUtil(str: JsonNode<*>, variableTemporary: HashMap<String, JsonNode<*>> = Maps.newHashMap(), obj: JsonNode<*> = JsonNode.NULL): JsonNode<*> {
+    internal fun stringUtil(str: JsonNode<*>, variableTemporary: HashMap<String, JsonNode<*>> = Maps.newHashMap()): JsonNode<*> {
         val map = Maps.newHashMap<String, JsonNode<*>>(core.variablePool)
         if (variableTemporary.isNotEmpty()) map.putAll(variableTemporary)
 
@@ -18,24 +18,21 @@ class JsonProcessorUtil internal constructor(private val core: JsonProcessorCore
                     original = original.replace(name, map[it]!!.toString())
                 }
 
-                if (obj != JsonNode.NULL) {
-                    original.replace("%it", obj.toString())
-                }
-
                 val node =
                             if (original[0] == '%') {
                                 map[original.replaceFirst("%", "")] ?: StringNode(original)
                             } else if (original[0] == '#') {
-                                core.methodHandle.runMethod(json.tryPullArrayOrEmpty(core.fileManager.getMainNode().get(original.replaceFirst("#", ""))))
+                                core.methodHandle.runMethod(json.tryPullArrayOrEmpty(core.fileManager.getMainNode().get(original.replaceFirst("#", ""))), variableTemporary)
                             } else if (original[0] == '!') {
                                 val fileName = original.substring(1, original.indexOf("#"))
                                 val methodName = original.substring(original.indexOf("#") + 1)
 
-                                core.methodHandle.runMethod(core.fileManager.getMethod(fileName, methodName))
+                                core.methodHandle.runMethod(core.fileManager.getMethod(fileName, methodName), variableTemporary)
                             } else StringNode(original)
 
 
-                tryGetNode(node.toString())
+                if (node != JsonNode.NULL) tryGetNode(node.toString())
+                else BooleanNode(true)
             }
 
             JsonNode.NodeType.Array -> core.methodHandle.arrayUtil(json.tryPullArrayOrEmpty(str))
@@ -46,9 +43,8 @@ class JsonProcessorUtil internal constructor(private val core: JsonProcessorCore
     internal fun arrayCommandHandle(node: ArrayNode, pool: HashMap<String, JsonNode<*>> = Maps.newHashMap(), isPart: Boolean = false): JsonNode<*> {
         val commandLine = if (node[1].type == JsonNode.NodeType.Array) json.tryPullArrayOrEmpty(node[1]) else {
             val nod = ArrayNode()
-            for (i in 1 until node.obj.size) {
+            for (i in 1 until node.obj.size)
                 nod.add(node[i])
-            }
 
             nod
         }
@@ -67,7 +63,7 @@ class JsonProcessorUtil internal constructor(private val core: JsonProcessorCore
 
         return when (command) {
             "@add"      -> {
-                list.add(commandLine[2].asTypeNode())
+                list.add(core.utilHandle.stringUtil(commandLine[2].asTypeNode()))
                 BooleanNode(true)
             }
             "@remove"   -> {
@@ -78,14 +74,19 @@ class JsonProcessorUtil internal constructor(private val core: JsonProcessorCore
             "@get"      -> list[commandLine[2].asTypeNode().toString().toInt()]
             "@size"     -> IntegerNode(list.obj.size)
             "@for"      -> {
-                list.obj.forEach {
-                    stringUtil(commandLine[2], pool, it)
-                }
-
+                eachList(commandLine[2].asTypeNode() as StringNode, list.obj)
                 BooleanNode(true)
             }
 
             else        -> BooleanNode(false)
+        }
+    }
+
+    private fun eachList(method: StringNode, list: List<JsonNode<*>>) {
+        list.forEach {
+            val map = Maps.newHashMap<String, JsonNode<*>>()
+            map["it"] = it
+            stringUtil(method, map)
         }
     }
 
@@ -105,7 +106,7 @@ class JsonProcessorUtil internal constructor(private val core: JsonProcessorCore
             }
         }
 
-        for (step in json.tryPullArrayOrEmpty(node[2]).obj) {
+        for (step in json.tryPullArrayOrEmpty(node[1]).obj) {
             if (!processorBoolean(json.tryPullArrayOrEmpty(step)).obj) {
                 return core.utilHandle.stringUtil(node[3], pool)
             }

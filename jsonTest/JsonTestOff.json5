@@ -1,0 +1,11 @@
+{
+  init: [
+    ["@println", "Hello Method!"],
+    ["@println", "!JsonTestOff#get"]
+  ],
+
+  get: [
+    ["@overvar", "number",  ["@calculator", "114514+1919810"]],
+    ["@return", "%number"]
+  ]
+}

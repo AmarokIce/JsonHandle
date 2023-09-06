@@ -7,8 +7,9 @@ import club.someoneice.jsonprocessor.json
 import com.google.common.collect.Maps
 import java.io.File
 
+@Suppress("unused")
 class FileManager(internal val mainMap: Pair<String, MapNode>) {
-    val fileMap: HashMap<String, MapNode> = Maps.newHashMap()
+    internal val fileMap: HashMap<String, MapNode> = Maps.newHashMap()
 
     fun addFile(file: File) {
         if (file.isFile) {
