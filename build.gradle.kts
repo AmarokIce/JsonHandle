@@ -18,8 +18,7 @@ repositories {
 
 dependencies {
     implementation("club.someoneice.json:amarok-json-for-java:1.4.4")
-
-    testImplementation("com.google.guava:guava:32.1.2-jre")
+    implementation("com.google.guava:guava:32.1.2-jre")
 }
 
 application {

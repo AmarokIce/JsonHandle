@@ -57,7 +57,7 @@ class JsonProcessorMethod internal constructor(private val core: JsonProcessorCo
             "@min"          -> DoubleNode(core.utilHandle.stringUtil(node[1], pool).toString().toDouble() - core.utilHandle.stringUtil(node[2], pool).toString().toDouble())
             "@mul"          -> DoubleNode(core.utilHandle.stringUtil(node[1], pool).toString().toDouble() * core.utilHandle.stringUtil(node[2], pool).toString().toDouble())
             "@exc"          -> DoubleNode(core.utilHandle.stringUtil(node[1], pool).toString().toDouble() / core.utilHandle.stringUtil(node[2], pool).toString().toDouble())
-            "@calculator"   -> IntegerNode(Calculator.calculator(node[1].toString()))
+            "@calculator"   -> DoubleNode(CalculatorV2.calculator(node[1].toString()))
 
             "@if"           -> core.utilHandle.processorIf(node, pool)
             "@array"        -> core.utilHandle.arrayCommandHandle(node, pool)

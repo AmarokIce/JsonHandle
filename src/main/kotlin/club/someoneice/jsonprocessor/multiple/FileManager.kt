@@ -4,12 +4,11 @@ import club.someoneice.json.Pair
 import club.someoneice.json.node.ArrayNode
 import club.someoneice.json.node.MapNode
 import club.someoneice.jsonprocessor.json
-import com.google.common.collect.Maps
 import java.io.File
 
 @Suppress("unused")
 class FileManager(internal val mainMap: Pair<String, MapNode>) {
-    internal val fileMap: HashMap<String, MapNode> = Maps.newHashMap()
+    internal val fileMap: HashMap<String, MapNode> = HashMap()
 
     fun addFile(file: File) {
         if (file.isFile) {

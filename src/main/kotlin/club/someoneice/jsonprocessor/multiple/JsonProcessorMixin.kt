@@ -11,7 +11,7 @@ class JsonProcessorMixin internal constructor(private val core: JsonProcessorCor
         if (pMethodMixin.obj[0] != '!' || pMethodOriginal.obj[0] != '!') return BooleanNode(false)
 
         fun findMethod(name: String): ArrayNode {
-            val fileName = name.substring(1, name.indexOf("#"))
+            val fileName = name.substring(0, name.indexOf("#"))
             val methodName = name.substring(name.indexOf("#") + 1)
 
             return core.fileManager.getMethod(fileName, methodName)

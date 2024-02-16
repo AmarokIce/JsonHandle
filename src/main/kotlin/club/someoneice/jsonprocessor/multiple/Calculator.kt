@@ -3,7 +3,12 @@ package club.someoneice.jsonprocessor.multiple
 import kotlin.math.floor
 
 object Calculator {
+
     fun calculator(str: String, simple: Boolean = false): Int {
+        return CalculatorV2.calculator(str).toInt()
+    }
+
+    fun calculatorOld(str: String, simple: Boolean = false): Int {
         val steps: ArrayList<IntData> = ArrayList()
         var skip = false
 
