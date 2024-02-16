@@ -1,5 +1,7 @@
 package club.someoneice.jsonprocessor
 
+import club.someoneice.jsonprocessor.multiple.Calculator
+import club.someoneice.jsonprocessor.multiple.CalculatorV2
 import club.someoneice.jsonprocessor.multiple.ProcessorEntry
 import club.someoneice.jsonprocessor.simple.SimpleJsonProcessorCore
 import com.google.common.base.Stopwatch
@@ -8,8 +10,11 @@ import java.io.File
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val file: File = File("json/src/", "Main.json5")
-        ProcessorEntry(file, file.parentFile).get().runMain()
+        // val file: File = File("json/src/", "Main.json5")
+        // ProcessorEntry(file, file.parentFile).get().runMain()
+
+        val data = "5 + (5 * (2 * 2)) - 5"
+        println(CalculatorV2.calculator(data))
     }
 
     fun testRun() {
