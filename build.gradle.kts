@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.7.0"
     `maven-publish`
     application
 }
@@ -9,35 +9,17 @@ version = "1.0"
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://jitpack.io") }
 
-    /* Use jitpack.
     maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/AmarokIce/amarokjsonforjava")
-        credentials {
-            username = "AmarokIce"
-            password = System.getenv("GITHUB_TOKEN")
-        }
+        url = uri("http://maven.snowlyicewolf.club")
+        isAllowInsecureProtocol = true
     }
-    */
 }
 
 dependencies {
-    // Get from GitPackage
-    // implementation("club.someoneice.json:amarok-json-for-java:1.2")
+    implementation("club.someoneice.json:amarok-json-for-java:1.4.4")
 
-    // Get from Jitpack.io
-    implementation("com.github.AmarokIce:AmarokJsonForJava:1.2")
-    implementation("com.google.guava:guava:32.1.2-jre")
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-kotlin {
-    jvmToolchain(8)
+    testImplementation("com.google.guava:guava:32.1.2-jre")
 }
 
 application {
