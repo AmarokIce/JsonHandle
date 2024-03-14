@@ -1,4 +1,4 @@
-package club.someoneice.jsonprocessor
+package club.someoneice.jsonprocessor.util
 
 import club.someoneice.json.JSON
 
@@ -12,7 +12,4 @@ fun Boolean.goFalse(apply: () -> Unit): Boolean {
     return this
 }
 
-val getJson: JSON = JSON.json
-val getJson5: JSON = JSON.json5
-
-val json = getJson5
+val Json: JSON = JSON.json5

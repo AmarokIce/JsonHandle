@@ -1,11 +1,6 @@
 package club.someoneice.jsonprocessor
 
-import club.someoneice.jsonprocessor.multiple.Calculator
-import club.someoneice.jsonprocessor.multiple.CalculatorV2
-import club.someoneice.jsonprocessor.multiple.ProcessorEntry
-import club.someoneice.jsonprocessor.simple.SimpleJsonProcessorCore
-import com.google.common.base.Stopwatch
-import java.io.File
+import club.someoneice.jsonprocessor.util.CalculatorV2
 
 object Main {
     @JvmStatic

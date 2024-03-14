@@ -1,4 +1,4 @@
-package club.someoneice.jsonprocessor.multiple
+package club.someoneice.jsonprocessor.util
 
 object CalculatorV2 {
     fun calculator(str: String): Double {
