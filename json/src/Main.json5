@@ -1,12 +1,22 @@
 {
-  // 这是一个Json5文件。
   main: [
+    ["@var", "number", 5],
+    ["@run", "#data"]
+  ],
+
+  data: [
+    ["@var", "number", ["@add", "%number", 1]],
+    ["@if", ["@greater", "%number", 10], ["@print", ["@Add", "%number", 10]], "#data"]
+  ],
+
+  test: [
     ["@array", "@create", "testArray"],
     ["@array", "@add", "testArray", "FirstVariable"],
     ["@array", "@add", "testArray", "SecondVariable"],
     ["@array", "@for", "testArray", "#forEach"],
-    ["@if", ["@is", "FirstVariable", ["@array", "@get", "testArray", 0]], ["@print", "true"]]
-    ["@if"]
+    ["@if", ["@is", "FirstVariable", ["@array", "@get", "testArray", 0]], ["@print", "true"]],
+    ["@var", "TestName", "TestValue"],
+    ["@if", ["@isnot", "%TestName", "TestValue"], ["@print", "Error"], ["@print", "true"]]
   ],
 
   forEach: [

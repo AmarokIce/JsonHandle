@@ -37,8 +37,9 @@ object ProcessorCore {
         method.obj.forEach {
             if (it.asTypeNode().type != JsonNode.NodeType.Array) return@forEach
             it as ArrayNode
-            if (it[1].asTypeNode().type == JsonNode.NodeType.Map) {
-                privateMethods.put(it.get(0).toString(), it[1] as MapNode)
+            if (it[0].toString().startsWith("@method")) {
+                val name = it[0].toString().split(":")[1]
+                privateMethods.put(name, it[1] as MapNode)
                 return@forEach
             }
 
@@ -79,6 +80,7 @@ object ProcessorCore {
 
     private fun init() {
         commandMap["array"]         = CommandArray()
+        commandMap["map"]           = CommandMap()
         commandMap["calculator"]    = Calculator()
         commandMap["greater"]       = Greater()
         commandMap["less"]          = Less()
@@ -90,5 +92,19 @@ object ProcessorCore {
         commandMap["var"]           = Var()
         commandMap["println"]       = Println()
         commandMap["print"]         = Println()
+        commandMap["run"]           = Run()
+        commandMap["add"]           = Add()
+        commandMap["sub"]           = Sub()
+        commandMap["mul"]           = Mul()
+        commandMap["div"]           = Div()
+    }
+
+    @Suppress("unused")
+    fun preRegisterCommand(name: String, handler: IJsonHandler) {
+        commandMap[name.lowercase()] = handler
+    }
+
+    fun preAddVariable(name: String, value: JsonNode<*>) {
+        this.variablePool.put(name, value)
     }
 }
