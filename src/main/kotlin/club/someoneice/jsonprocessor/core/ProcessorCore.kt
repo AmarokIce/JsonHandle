@@ -13,7 +13,10 @@ object ProcessorCore {
     private val commandMap: HashMap<String, IJsonHandler> = HashMap()
     private val variablePool = MapNode()
 
-    @OptIn(ExperimentalStdlibApi::class)
+    init {
+        init()
+    }
+
     fun main() {
         val mainMethods = FileManager.filesNode.values.stream().filter { it.has("main") }.findFirst().getOrNull() ?: return
         val mainList = Json.tryPullArrayOrEmpty(mainMethods["main"]) ?: return
@@ -26,10 +29,11 @@ object ProcessorCore {
         loadMethod(mainMethods, "main", mainList)
     }
 
-    fun loadMethod(methods: MapNode, methodName: String, method: ArrayNode, shouldReturn: Boolean = false, privateVariablePool: MapNode = MapNode()): JsonNode<*>? {
+    fun loadMethod(methods: MapNode, methodName: String, methodRaw: ArrayNode, shouldReturn: Boolean = false, privateVariablePool: MapNode = MapNode()): JsonNode<*>? {
         var returnValue: JsonNode<*>? = null
 
         val privateMethods = MapNode()
+        val method = if (methodName == "#IN-LINE") ArrayNode().apply { add(methodRaw) } else methodRaw
         method.obj.forEach {
             if (it.asTypeNode().type != JsonNode.NodeType.Array) return@forEach
             it as ArrayNode
@@ -38,8 +42,9 @@ object ProcessorCore {
                 return@forEach
             }
 
-            val commandName = it[0].toString().replace("@", "")
-            if (commandMap.containsKey(commandName)) returnValue = commandMap[commandName]!!.handler(methods, privateMethods, method, variablePool, privateVariablePool)
+            val commandName = it[0].toString().replace("@", "").lowercase()
+            if (commandMap.containsKey(commandName))
+                returnValue = commandMap[commandName]!!.handler(methods, privateMethods, it, variablePool, privateVariablePool)
             returnValue ?: return@forEach
             return returnValue
         }
@@ -59,36 +64,31 @@ object ProcessorCore {
             val multiMethod = MapNode()
             fileMethod.obj.forEach(multiMethod::put)
             privateMethod.obj.forEach(multiMethod::put)
-            return loadMethod(multiMethod, command, privateMethod.get(command) as ArrayNode, shouldReturn)
-        }
-
-        if (privateMethod.has(command)) {
-            val multiMethod = MapNode()
-            fileMethod.obj.forEach(multiMethod::put)
-            privateMethod.obj.forEach(multiMethod::put)
-            return loadMethod(multiMethod, command, privateMethod.get(command) as ArrayNode, shouldReturn)
+            return loadMethod(multiMethod, command, privateMethod.get(command) as ArrayNode, shouldReturn, privateVariablePool)
         }
 
         if (fileMethod.has(command)) {
             val multiMethod = MapNode()
             fileMethod.obj.forEach(multiMethod::put)
             privateMethod.obj.forEach(multiMethod::put)
-            return loadMethod(multiMethod, command, fileMethod.get(command) as ArrayNode, shouldReturn)
+            return loadMethod(multiMethod, command, fileMethod.get(command) as ArrayNode, shouldReturn, privateVariablePool)
         }
 
         throw JsonProcessorException(command, "Cannot find file in method: $command")
     }
 
     private fun init() {
-        commandMap["Array"]         = CommandArray()
-        commandMap["Calculator"]    = Calculator()
-        commandMap["Greater"]       = Greater()
-        commandMap["Less"]          = Less()
-        commandMap["Is"]            = Is()
-        commandMap["IsNot"]         = IsNot()
-        commandMap["If"]            = If()
-        commandMap["Return"]        = Return()
-        commandMap["PrivateVar"]    = PrivateVar()
-        commandMap["Var"]           = Var()
+        commandMap["array"]         = CommandArray()
+        commandMap["calculator"]    = Calculator()
+        commandMap["greater"]       = Greater()
+        commandMap["less"]          = Less()
+        commandMap["is"]            = Is()
+        commandMap["isnot"]         = IsNot()
+        commandMap["if"]            = If()
+        commandMap["return"]        = Return()
+        commandMap["privateVar"]    = PrivateVar()
+        commandMap["var"]           = Var()
+        commandMap["println"]       = Println()
+        commandMap["print"]         = Println()
     }
 }

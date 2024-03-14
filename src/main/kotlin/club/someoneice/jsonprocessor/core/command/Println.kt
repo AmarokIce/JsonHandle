@@ -7,7 +7,7 @@ import club.someoneice.jsonprocessor.api.IJsonHandler
 import club.someoneice.jsonprocessor.core.ProcessorCore
 import club.someoneice.jsonprocessor.exception.JsonProcessorException
 
-class PrivateVar: IJsonHandler {
+class Println: IJsonHandler {
     override fun handler(fileMethods: MapNode, privateMethod: MapNode, commandNode: ArrayNode, variablePool: MapNode, privateVariablePool: MapNode): JsonNode<*>? {
         fun checkAndGeValue(value: JsonNode<*>): JsonNode<*> {
             val type = value.asTypeNode().type
@@ -33,7 +33,7 @@ class PrivateVar: IJsonHandler {
             return value
         }
 
-        privateVariablePool.put(commandNode[1].toString(), checkAndGeValue(commandNode[2]))
+        println(checkAndGeValue(commandNode[1]))
         return null
     }
 }

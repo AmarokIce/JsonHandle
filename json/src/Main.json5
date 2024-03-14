@@ -1,0 +1,15 @@
+{
+  // 这是一个Json5文件。
+  main: [
+    ["@array", "@create", "testArray"],
+    ["@array", "@add", "testArray", "FirstVariable"],
+    ["@array", "@add", "testArray", "SecondVariable"],
+    ["@array", "@for", "testArray", "#forEach"],
+    ["@if", ["@is", "FirstVariable", ["@array", "@get", "testArray", 0]], ["@print", "true"]]
+    ["@if"]
+  ],
+
+  forEach: [
+    ["@print", "%it"],
+  ]
+}

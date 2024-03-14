@@ -10,5 +10,4 @@ fun main(vararg args: String) {
     } else args[0]
 
     FileManager.scanFile(File(root))
-
 }

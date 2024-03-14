@@ -32,8 +32,8 @@ class If: IJsonHandler {
             if (!runBool) return null else throw JsonProcessorException(value.toString(), "Cannot processor Method!")
         }
 
-        if (checkAndGeValue(commandNode[1], true)!!.obj as Boolean) checkAndGeValue(commandNode[2], false)
-        else if (commandNode.obj.size > 2) checkAndGeValue(commandNode[3], false)
+        if (checkAndGeValue(commandNode[1], true)!!.toString().toBoolean()) checkAndGeValue(commandNode[2], false)
+        else if (commandNode.obj.size > 3) checkAndGeValue(commandNode[3], false)
 
         return null
     }
